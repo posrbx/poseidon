@@ -1,65 +1,122 @@
---// 🔱 active key
-local activekey = "pos-028hf2f2a"
+local activekey = "poseidon-8y2f7hn2oi4uo98gh"
 
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
-local GUI = Mercury:Create{
-    Name = "🔱",
-    Size = UDim2.fromOffset(600, 400),
-    Theme = Mercury.Themes.Serika,
-    Link = "https://poseidon.xyz"
-}
-GUI:Notification{
-	Title = "Poseidon | Key System",
-	Text = "If you don't have a key, visit discord.gg/invite!",
-	Duration = 3,
-	Callback = function() end
-}
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
---// 🔱 key system
+local Window = Fluent:CreateWindow({
+    Title = "🔱 Poseidon",
+    SubTitle = "Key System",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Aqua",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
 
-local keysystem = GUI:Tab{
-	Name = "key",
-	Icon = "rbxassetid://8569322835"
-}
-keysystem:Textbox{
-	Name = "🔱 | Enter Key",
-	Callback = function(text) 
-    print("Key Entered: " .. text)
-    if text == activekey then
-        GUI:Notification{
-        	Title = "Poseidon | Key System",
-         	Text = "Key Valid. Please wait while your script loads.",
-        	Duration = 3,
-        	Callback = function() end}
-        else
-            GUI:Notification{
-                Title = "Poseidon | Key System",
-                Text = "Key Invalid. Check your key, then retry.",
-                Duration = 3,
-                Callback = function() end}
-    end
-    end
-}
-keysystem:Button{
-	Name = "Dont have a key? Click me!",
-	Description = "Copies discord invite link.",
-	Callback = function()
-        setclipboard("https://discord.gg/invite")
-        GUI:Notification{
-	      Title = "Poseidon | Notification",
-        	Text = "Copied discord invite!",
-	      Duration = 3,
-        	Callback = function() end}
-    end
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Key System", Icon = "key" }),
+    Credits = Window:AddTab({ Title = "Script Credits", Icon = "scroll" }),
+    Settings = Window:AddTab({ Title = "UI Settings", Icon = "settings" })
 }
 
---// 🔱 credits
 
-GUI:Credit{
-	Name = "tranquil",
-	Description = "Poseidon | Founder & Active Owner"
-}
-GUI:Credit{
-	Name = "JAILHAX",
-	Description = "Poseidon | Lead Programmer"
-}
+local Options = Fluent.Options
+
+do
+    Tabs.Credits:AddParagraph({
+        Title = "tranquil",
+        Content = "🔱 | Founder & Active Owner."
+    })
+    Tabs.Credits:AddParagraph({
+        Title = "itztemp",
+        Content = "🔱 | Lead Programmer"
+    })
+
+    Fluent:Notify({
+        Title = "🔱 | Notification",
+        Content = "This is a notification",
+        SubContent = "SubContent", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+
+    Tabs.Main:AddButton({
+        Title = "Discord Server",
+        Description = "Don't have a key? Get one from our server!",
+        Callback = function()
+            Window:Dialog({
+                Title = "Are you sure?",
+                Content = "Do you want to copy our discord invite?",
+                Buttons = {
+                    {
+                        Title = "Copy",
+                        Callback = function()
+                            print("Confirmed the dialog.")
+                            setclipboard("https://discord.gg/poseidon")
+                        end
+                    },
+                    {
+                        Title = "Cancel",
+                        Callback = function()
+                        end
+                    }
+                }
+            })
+        end
+    })
+
+    local Input = Tabs.Main:AddInput("Input", {
+        Title = "Enter Key",
+        Default = nil,
+        Placeholder = "🔱",
+        Numeric = false, -- Only allows numbers
+        Finished = true, -- Only calls callback when you press enter
+        Callback = function(Value)
+            print("Input changed:", Value)
+            if Value == activekey then
+                print("Key Valid")
+                else
+                print("Key Invalid")
+            end
+        end
+    })
+end
+
+
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- InterfaceManager (Allows you to have a interface managment system)
+
+-- Hand the library over to our managers
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- You can add indexes of elements the save manager should ignore
+SaveManager:SetIgnoreIndexes({})
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+InterfaceManager:SetFolder("FluentScriptHub")
+SaveManager:SetFolder("FluentScriptHub/specific-game")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+Window:SelectTab(1)
+
+Fluent:Notify({
+    Title = "Poesidon",
+    Content = "Key System fully loaded.",
+    Duration = 8
+})
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
