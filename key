@@ -1,0 +1,65 @@
+--// 🔱 active key
+local activekey = "pos-028hf2f2a"
+
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local GUI = Mercury:Create{
+    Name = "🔱",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Serika,
+    Link = "https://poseidon.xyz"
+}
+GUI:Notification{
+	Title = "Poseidon | Key System",
+	Text = "If you don't have a key, visit discord.gg/invite!",
+	Duration = 3,
+	Callback = function() end
+}
+
+--// 🔱 key system
+
+local keysystem = GUI:Tab{
+	Name = "key",
+	Icon = "rbxassetid://8569322835"
+}
+keysystem:Textbox{
+	Name = "🔱 | Enter Key",
+	Callback = function(text) 
+    print("Key Entered: " .. text)
+    if text == activekey then
+        GUI:Notification{
+        	Title = "Poseidon | Key System",
+         	Text = "Key Valid. Please wait while your script loads.",
+        	Duration = 3,
+        	Callback = function() end}
+        else
+            GUI:Notification{
+                Title = "Poseidon | Key System",
+                Text = "Key Invalid. Check your key, then retry.",
+                Duration = 3,
+                Callback = function() end}
+    end
+    end
+}
+keysystem:Button{
+	Name = "Dont have a key? Click me!",
+	Description = "Copies discord invite link.",
+	Callback = function()
+        setclipboard("https://discord.gg/invite")
+        GUI:Notification{
+	      Title = "Poseidon | Notification",
+        	Text = "Copied discord invite!",
+	      Duration = 3,
+        	Callback = function() end}
+    end
+}
+
+--// 🔱 credits
+
+GUI:Credit{
+	Name = "tranquil",
+	Description = "Poseidon | Founder & Active Owner"
+}
+GUI:Credit{
+	Name = "JAILHAX",
+	Description = "Poseidon | Lead Programmer"
+}
