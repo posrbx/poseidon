@@ -1,0 +1,25 @@
+--// 🔱 gui
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local GUI = Mercury:Create{
+    Name = "Jailbreak",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Serika,
+    Link = "https://poseidon.xyz"
+}
+GUI:Notification{
+	Title = "Poseidon | Notification",
+	Text = "Currently using the free version.",
+	Duration = 3,
+	Callback = function() end
+}
+
+--// 🔱 credits
+
+GUI:Credit{
+	Name = "tranquil",
+	Description = "Poseidon | Founder & Active Owner"
+}
+GUI:Credit{
+	Name = "JAILHAX",
+	Description = "Poseidon | Lead Programmer"
+}
